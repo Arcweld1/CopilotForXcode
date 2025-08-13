@@ -13,6 +13,8 @@ public protocol ConversationServiceType {
     func models(workspace: WorkspaceInfo) async throws -> [CopilotModel]?
     func notifyDidChangeWatchedFiles(_ event: DidChangeWatchedFilesEvent, workspace: WorkspaceInfo) async throws
     func agents(workspace: WorkspaceInfo) async throws -> [ChatAgent]?
+    func notifyChangeTextDocument(fileURL: URL, content: String, version: Int, workspace: WorkspaceInfo) async throws
+    func reviewChanges(workspace: WorkspaceInfo, params: ReviewChangesParams) async throws -> CodeReviewResult?
 }
 
 public protocol ConversationServiceProvider {
@@ -25,6 +27,8 @@ public protocol ConversationServiceProvider {
     func models() async throws -> [CopilotModel]?
     func notifyDidChangeWatchedFiles(_ event: DidChangeWatchedFilesEvent, workspace: WorkspaceInfo) async throws
     func agents() async throws -> [ChatAgent]?
+    func notifyChangeTextDocument(fileURL: URL, content: String, version: Int, workspaceURL: URL?) async throws
+    func reviewChanges(_ params: ReviewChangesParams) async throws -> CodeReviewResult?
 }
 
 public struct FileReference: Hashable, Codable, Equatable {

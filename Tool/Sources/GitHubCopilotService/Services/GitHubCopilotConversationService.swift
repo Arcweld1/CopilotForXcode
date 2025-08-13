@@ -6,6 +6,10 @@ import Workspace
 import LanguageServerProtocol
 
 public final class GitHubCopilotConversationService: ConversationServiceType {
+    public func notifyChangeTextDocument(fileURL: URL, content: String, version: Int, workspace: WorkspaceInfo) async throws {
+        guard let service = await serviceLocator.getService(from: workspace) else { return }
+        try await service.notifyChangeTextDocument(fileURL: fileURL, content: content, version: version)
+    }
 
     private let serviceLocator: ServiceLocator
     
@@ -110,6 +114,12 @@ public final class GitHubCopilotConversationService: ConversationServiceType {
     public func agents(workspace: WorkspaceInfo) async throws -> [ChatAgent]? {
         guard let service = await serviceLocator.getService(from: workspace) else { return nil }
         return try await service.agents()
+    }
+    
+    public func reviewChanges(workspace: WorkspaceInfo, params: ReviewChangesParams) async throws -> CodeReviewResult? {
+        guard let service = await serviceLocator.getService(from: workspace) else { return nil }
+        
+        return try await service.reviewChanges(params: params)
     }
 }
 
